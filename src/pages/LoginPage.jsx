@@ -1,0 +1,106 @@
+import React, { useState } from "react";
+
+function LoginPage({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      alert("Username and password cannot be empty.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      await onLogin(username, password);
+    } catch (error) {
+      console.error("Login submission error in LoginPage:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+      <div class="flex flex-col justify-center items-center bg-gray-100/50 p-8">
+        <div className="max-w-md w-full">
+          <div className="flex justify-center mb-8">
+            <div className="h-24 w-24 rounded-full bg-gradient-to-r from-blue-500 to-hot-pink flex items-center justify-center shadow-lg ring-4 ring-white">
+              <i className="fas fa-user-clock text-white text-4xl"></i>
+            </div>
+          </div>
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900">
+              AttendTrack
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Sign in to manage your attendance
+            </p>
+          </div>
+
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="username-login" className="sr-only">
+                Username
+              </label>
+              <input
+                id="username-login"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-hot-pink focus:border-hot-pink sm:text-sm"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password-login" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password-login"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-hot-pink focus:border-hot-pink sm:text-sm"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-hot-pink hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hot-pink transition-colors duration-150 disabled:opacity-50"
+              >
+                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                  <i className="fas fa-sign-in-alt h-5 w-5 text-sky-blue group-hover:text-white"></i>
+                </span>
+                {isLoading ? "Signing in..." : "Sign in"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center h-screen bg-black/50">
+        <div className="w-full max-w-2xl h-64 bg-transparent p-4">
+          <div
+            className="w-full h-full bg-contain bg-no-repeat bg-center"
+            style={{ backgroundImage: "url('/banner-logo.png')" }}
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default LoginPage;
